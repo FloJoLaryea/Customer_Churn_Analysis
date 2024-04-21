@@ -148,7 +148,7 @@ Visualisations were produced based on the analytical questions asked. These visu
 
 Although executed separately in jupyter notebook, these visualisations were deployed in PowerBI and the results are as shown in the dashboard below.
 
-![Data dashboard]("https://github.com/FloJoLaryea/Customer_Churn_Analysis/blob/main/Customer_churn_Dashboard.png")
+![Data dashboard] ("https://github.com/FloJoLaryea/Customer_Churn_Analysis/blob/main/Customer_churn_Dashboard.png")
 ## 🔎Data preparation and preprocessing
 
 The target column was the **Churn** column
