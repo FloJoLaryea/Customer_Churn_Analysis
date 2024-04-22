@@ -303,4 +303,4 @@ Their expertise, dedication, and commitment to our learning journey have been in
 
 
 ## 📚References and bibliography
-The Confusion Matrix : https://medium.com/@coderacheal/the-confusion-matrix-explained-like-you-were-five-75ae704577f2
+[The Confusion Matrix](https://medium.com/@coderacheal/the-confusion-matrix-explained-like-you-were-five-75ae704577f2)
