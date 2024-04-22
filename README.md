@@ -291,6 +291,7 @@ Overall, Vodafone could take advantage of the key features leading to churn and 
 - [Link to my article on Medium](https://medium.com/@florencelaryea88/performing-churn-analysis-prediction-ed5bf68c34c2)
 
  **Co-authors**
+ 
  Members of Team Selenium: Bright Abu Kwarteng Snr, Success Makafui Kwawu and Abraham Worku Woldeselassie.
 
 
