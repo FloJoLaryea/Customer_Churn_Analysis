@@ -100,9 +100,10 @@ Overall, the dataset did not need much cleaning. Key highlights of the cleaning 
 - Converting to right datatypes
 - Renaming column names to be coherent with each dataset
 - Mapping boolean and None values to more meaningful categories
+- Filling null values
 
 
-As this project included building machine models to predict, filling of null values were paused in this stage and incorporated in the machine learning pipelines to improve thr robustness of the model
+As this project included building machine models to predict, some filling of null values were paused in this stage and incorporated in the machine learning pipelines to improve the robustness of the model
 
 
 
@@ -134,23 +135,22 @@ Following **univariate and bivariate analysis**, it revealed:
 Visualisations were produced based on the analytical questions asked. These visuals were paramount to providing a solid foundation for analysising any trends or hitting patterns in analysing the factors contributing to churn analysis
 
  Business Questions
-1. What is the rate of churn by gender?
-2. How do different levels of monthly customer charges impact churn rates?
-3. Do customers who pay more monthly charges tend to stay longer? 
-4. What is the prefered service [Streaming movies, streaming TV] gender?
-5. What impact does the prefered service has on customer churn?
-6. Are customers on long-term contracts less likely to churn?
-7. How does does the relationship between monthly charges and churn differ based on contract duration?
-8. What impact does the ISPs have on customer churn?
-9. Which Internet Service Provider accounts for the most charges?
-10. What is the effect of method of payment on customer churn?
+1. How do different levels of monthly customer charges impact churn rates?
+2. Do customers who pay more monthly charges tend to stay longer? 
+3. Is there a correlation between higher monthly charges and improved service quality (e.g., better internet speed, enhanced customer support)?
+4. Are customers on longer-term contracts (e.g., annual contracts) less likely to churn compared to those on month-to-month plans?
+5. How does the relationship between monthly charges and churn differ based on contract duration? Can we encourage customers to opt for longer contracts to reduce churn?
+6. Does the amount of time spent being a customer have a relationship with the probability of churning by gender?
+7. Does one's total charges over the year increase as expected or is there a trend of discount for loyal customers?
+8. Which Internet Service Provider accounts for the most charges?
+9. What is the effect of method of payment on customer churn?
 
 
 Although executed separately in jupyter notebook, these visualisations were deployed in PowerBI and the results are as shown in the dashboard below.
 
 !["https://github.com/FloJoLaryea/Customer_Churn_Analysis/blob/main/Customer_churn_Dashboard.png"](https://github.com/FloJoLaryea/Customer_Churn_Analysis/blob/main/Datasets/Customer_churn_Dashboard.png)
+[Link to dashboard](https://app.powerbi.com/groups/me/reports/4b740771-584c-49f2-8e1b-a1f4933b22e1/ReportSection?experience=power-bi)
 
-[Link to dashboard]("https://app.powerbi.com/groups/me/reports/4b740771-584c-49f2-8e1b-a1f4933b22e1/ReportSection?experience=power-bi")
 ## 🔎Data preparation and preprocessing
 
 The target column was the **Churn** column
@@ -158,7 +158,7 @@ The target column was the **Churn** column
 ⭕The Churn column was visualised to check the degree of imbalance as this could impact the accuracy of the machine learning models. It was moderately imbalanced with a ratio of 70:30
 
 ⭕A Phi-K matrix was used to compare the correlation between the churn and all other features especially the categorical features.
-From the Phi-K matrix, the features most important for data modelling were:
+From the Phi-K matrix, the features most important for data modeling were:
 
 - Tenure
 
@@ -189,8 +189,7 @@ Further actions were to exclude totalcharges and drop the other columns not iden
 ⭕Several pipelines were created to impute missing values, scale numerical values and encode categorical columns
 
 
-⭕ Nulls of columns such as the stage or investor were to be filled with “undisclosed” under the assumption that source of such knowledge was classified, some companies had not yet received funding, and some companies were self funding with their own capital in order to maintain the data unbiased.
-## 📐Modelling
+## 📐Modeling
 
 The dataset is moderately imbalanced. The modelling was done in two phases,
 - first using methods known to be able to handle imbalanced datasets to train
@@ -211,30 +210,50 @@ The metrics used to evaluate the performance of the models were:
 - f1_score
 - confusion matrix
 
+  Important to note: Accuracy was not deemed reliable in evaluating modeling with imbalanced data.
+
+## ⚽Model Evaluation and Prediction
+- The top 3 performing models from the best modeling strategy (with balanced or imbalanced data) underwent hyperparameter tuning using Random Search Object grid.
+   - The results from this search was incorporated in fine tuning the models and making predictions.
+- The model was visually evaluuated using the AUC (Area Under The Curve) ROC (Receiver Operating Characteristics) curve
+
+- A test dataset was preprocessed in the same manner as the train data and the best estimator was used to predict the churn column.
+
+- The machine learning models were saved for future use deployment.
+
+
 ## 👀Observations
-🗝️***Genders*** : male customers are slightly higher than female customrs.
-
-🗝️***Partner***: Customers with or without partners are about the same.
-
-🗝️***Dependents*** : Seems we have more customers without dependent members than those who have..
-
-🗝️***PhoneService*** : Also the majority of customers who don't have a phone service are way more than those who have.
-
-🗝️
-***InternetService*** : Customers who have internet service, prefer mostly DSL or Fiber optic.
-
-🗝️***MultipleLines, InternetService, OnlineSecurity, OnlineBackup, TechSupport*** : There is a common pattern in these features indicating that most of the customers prefer not to have access to these features than those who do.
-
-🗝️***StreamingMovies and StreamingTV***  have similar barplots, which means there is an equal amount of customers who prefer to either have or not have these services.
-
-🗝️***Contract*** : In general customers prefer month-to-month contracts compared to other types such as two year or one year contracts.
-
-🗝️***PaperlessBilling*** :  most customers would rather have Paperless billing than any other form and seems they use all the different forms of banking transactions such with Electronic Check being the majority
+***From EDA and visualisations***:
 
 
-From training with unbalanced data, the top 3 performing models based on the f1_score are: logistic regression, catboost and sgb_classifier
+🗝️***Monthly charges*** : Monthly charges play a significant role in customer churning. However, prices may differ because some customers include some additional services. There seems to be a range of high charges where the probability of churning is high.
 
-Confusion matrix metric revealed the machine still classifying churn incorrectly
+🗝️***Services***: Most customers choose to have an internet services with some added services. There is a slight increase of monthly charges for those who include services than those who don't but when linked to churn, it is a 50-50 chance.
+
+🗝️***Contract*** : In general customers prefer month-to-month contracts compared to other types such as two year or one year contracts. This can be interpreted as many customers desiring flexibility to change their decision as at when as most year contracts have terms and conditions.
+- Customers who opt for one or two years typcaly have charges ranging from as low as $20- 110 per month.
+- Customers having a contact of one year who fall in the range of $70-$100 have a high chance of churning.
+- Customers having a contact of two years who fall in the range of $100- $110 have a high chance of churning although the outliers in the chart suggest some ccustomers churning even at low monthly charges.
+
+🗝️***Tenure*** : Customers who have stay onger have the lowest risk of churning.
+
+🗝️**Hypothesis testing**:
+
+With a P-value of **1.2019873209608733e-42**, the null hypothesis was rejected and it was maintained that there is indeed statistically significant relationship between the amount of monthly customer charges and customer churn.
+
+
+
+***From modeling***:
+
+
+🗝️From training with unbalanced data, the top 3 performing models based on the f1_score are: logistic regression, catboost and sgb_classifier. Confusion matrix metric revealed the machine still classifying churn incorrectly
+
+🗝️From training with balanced data, the top 3 performing models based on the f1_score are: catboost, sgb_classifier and random_forest. Confusion matrix metric revealed the machine still classifying churn incorrectly although the True Positives had increased.
+
+🗝️Visualization of the performance of the multiclass classification problem using the AUC (Area Under The Curve) ROC (Receiver Operating Characteristics) curve showed a good performance of the models with AUC-values above 70% (with the exception of the decision tree model) which shows a good sign to be in production.
+The best threshold for True Positive Rate (TPR) as compared to False Positive Rate (FPR) is 0.1760 with a FPR of 0.493261 and TPR of 0.966292.
+
+🗝️Fine tuning the top 3 models with hyperparameters emerged sgb classifier as the best estimator with an f-1 score of 0.78
 
 
 
@@ -253,24 +272,26 @@ Confusion matrix metric revealed the machine still classifying churn incorrectly
 
 
 ## ✍️Conclusion and Recommendations
-From the study, it can be concluded that Financial Services is the heart of start-up businesses in India with majority of these services combined with digital or technological services.
+- From the study, it can be concluded that Monthly charges is the heart of customer churning in Vodafone. The company has approximately 73% of customers retained. However, 27% of customers churning is somewhat of significant value and should be addressed.
 
-India is one of the world leaders in Technology and IT and it's no surprise when combined with finance, it translates to the Financial Services which looking at the timeline, were funded massively in a bid to stabilise the economy after the 2020 pandemic.
+- There was no siginificant correlation between gender and churn, therefore remedial strategies should apply to all irrespective of gender.
+ - Most customers are not senior citizens, therefore more focus should be centered on the youth.
 
-In addition, location favors the amount of funding one receives. If business are set up in Mumbai or Bangalore, the probability of getting funding is high. 
+- In addition, although many customers use electronic check, it is this same group that churns the most. A mobile payment method could be tested and implemented to investigate if electronic check is a hassle for customers. 
 
-It is also safe to say that the more funding of a given year, the more startups would spring up. Recommendations are therefore, to branch in finance in either of top 2 headquarters. More analysis has to be carried out on the origin of investors.
+- It is also recommended that regardless of the additional services offered, there should be a cap on monthly charges and the risk of churning increases after a range.
 
-It is also recommended that the younger the startup, the more work has to be done in terms of innovation, marketing and networking in order to attract investors quickly. Otherwise, the main source of funding is self-fund, family and friends and government.
+- It is also recommended to include attractive benefits, discounts for loyal customers over time to encourage customers to choose year contracts. The charges for year contracts could also be lowered to seem like a more attractive than month-to-month
 
-
-It is also recommended to enhance analysis in the future with machine learning models to predict a projection of the current years as well as integrating with real time data to monitor market trends and analyse factors influencing startup business metrics. The likelihood of success of a business or the rate of growth depending on the sector could also be studied.
-
-Overall, a majority of startups in India seem to thrive as India is a digital/tech dominated country and about the greater portion of startups are in this sector. The Indian startup ecosystem has growm rapidly over the recent years and even more growth can be anticipated in the coming years.
+Overall, Vodafone could take advantage of the key features leading to churn and implemented the recommendations when a customer is predicted to churn
 ## 🙋‍♀️Authors
 
 - Florence Josephina Laryea
 - florencelaryea@gmail.com
+- [Link to my article on Medium](https://medium.com/@florencelaryea88/performing-churn-analysis-prediction-ed5bf68c34c2)
+
+ **Co-authors**
+ Members of Team Selenium: Bright Abu Kwarteng Snr, Success Makafui Kwawu and Abraham Worku Woldeselassie.
 
 
 ## 🤗Acknowledgements
@@ -281,8 +302,4 @@ Their expertise, dedication, and commitment to our learning journey have been in
 
 
 ## 📚References and bibliography
-Indian startup ecosystem: https://www.startupindia.gov.in/content/sih/en/funding.html
-
-Restructing column sectors:https://www.businessinsider.in/business/startups/news/top-10-industries-for-new-startups-in-india-as-per-hurun-list/articleshow/105651758.cms
-
-Currency exchange rate: https://www.poundsterlinglive.com/history/USD-INR-2018
+The Confusion Matrix : https://medium.com/@coderacheal/the-confusion-matrix-explained-like-you-were-five-75ae704577f2
