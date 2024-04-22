@@ -250,7 +250,7 @@ With a P-value of **1.2019873209608733e-42**, the null hypothesis was rejected a
 
 🗝️From training with balanced data, the top 3 performing models based on the f1_score are: catboost, sgb_classifier and random_forest. Confusion matrix metric revealed the machine still classifying churn incorrectly although the True Positives had increased.
 
-🗝️Visualization of the performance of the multiclass classification problem using the AUC (Area Under The Curve) ROC (Receiver Operating Characteristics) curve showed a good performance of the models with AUC-values above 70% (with the exception of the decision tree model) which shows a good sign to be in production.
+🗝️Visualization of the performance of the binary classification problem using the AUC (Area Under The Curve) ROC (Receiver Operating Characteristics) curve showed a good performance of the models with AUC-values above 70% (with the exception of the decision tree model) which shows a good sign to be in production.
 The best threshold for True Positive Rate (TPR) as compared to False Positive Rate (FPR) is 0.1760 with a FPR of 0.493261 and TPR of 0.966292.
 
 🗝️Fine tuning the top 3 models with hyperparameters emerged sgb classifier as the best estimator with an f-1 score of 0.78
